@@ -26,6 +26,16 @@ class Barcoder
      */
 
     /**
+     * __construct
+     *
+     * @author David <chinaik.lee@armonia-tech.com>
+     * @return void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * set barcode bottom code font format
      *
      * @author Armonia Tech <developer@armonia-tech.com>
@@ -35,7 +45,7 @@ class Barcoder
      * @param boolean optional $has_print_text
      * @return void
      */
-    public static function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true)
+    public function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true)
     {
         // set the print text
         $this->barcode_array['font_file'] = $font_filepath;
@@ -56,7 +66,7 @@ class Barcoder
      * @param array $rgb
      * @return mixed boolean image
      */
-    public static function generateBarcodePNG(string $barcode, string $format = 'C128', int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
+    public function generateBarcodePNG(string $barcode, string $format = 'C128', int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
     {
         // set the barcode content and type
         $this->setBarcode($barcode, $format);
