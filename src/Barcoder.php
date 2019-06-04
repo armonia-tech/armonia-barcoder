@@ -10,6 +10,12 @@ class Barcoder
     protected $barcode_array;
 
     /**
+     * array representation of font.
+     * @protected
+     */
+    protected $font_array;
+
+    /**
      * This is the class copy from TCPDF packagist.
      * Return an array representations for common 1D barcodes:<ul>
      * <li>$arrcode['code'] code to be printed on text label</li>
@@ -48,10 +54,10 @@ class Barcoder
     public function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true)
     {
         // set the print text
-        $this->barcode_array['font_file'] = $font_filepath;
-        $this->barcode_array['has_print_text'] = $has_print_text;
-        $this->barcode_array['font_size'] = $font_size;
-        $this->barcode_array['font_top_spacing'] = $font_top_spacing;
+        $this->font_array['font_file'] = $font_filepath;
+        $this->font_array['has_print_text'] = $has_print_text;
+        $this->font_array['font_size'] = $font_size;
+        $this->font_array['font_top_spacing'] = $font_top_spacing;
     }
 
     /**
@@ -196,13 +202,13 @@ class Barcoder
      */
     public function getBarcodePngData($w = 2, $h = 100, $color = array(0, 0, 0))
     {
-        if (!empty($this->barcode_array['has_print_text'])) {
+        if (!empty($this->font_array['has_print_text'])) {
             $code = $this->barcode_array['code'];
             $len = strlen($code);
 
-            $font_file = $this->barcode_array['font_file'];
-            $font_size = $this->barcode_array['font_size'];
-            $font_top_spacing = $this->barcode_array['font_top_spacing'];
+            $font_file = $this->font_array['font_file'];
+            $font_size = $this->font_array['font_size'];
+            $font_top_spacing = $this->font_array['font_top_spacing'];
             $type_space = imagettfbbox($font_size, 0, $font_file, $code);
 
             // Determine image width and height, added 5 forpixels padding:
@@ -254,7 +260,7 @@ class Barcoder
             $png->drawimage($bar);
         }
 
-        if (!empty($this->barcode_array['has_print_text'])) {
+        if (!empty($this->font_array['has_print_text'])) {
             $xpos = ($width - $image_width) / 2;
             imagettftext($png, $font_size, 0, $xpos, $bh+$image_height, $fgcol, $font_file, $code);
         }
