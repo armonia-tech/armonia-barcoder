@@ -1,0 +1,24 @@
+{
+    "name": "armonia-tech/armonia-barcoder",
+    "description": "Tool to generate 1D barcode",
+    "keywords": ["armonia", "armonia tech", "barcode"],
+    "homepage": "https://github.com/armonia-tech/armonia-barcoder.git",
+    "license": "BSD-3-Clause", 
+    "config": {
+        "vendor-dir": "vendors",
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": { "ArmoniaBarcoder\\": "src/" }
+    },
+    "authors": [
+        {
+            "name": "Armonia Tech",
+            "email": "developer@armonia-tech.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    }
+}
