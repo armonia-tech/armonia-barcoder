@@ -26,6 +26,25 @@ class Barcoder
      */
 
     /**
+     * set barcode bottom code font format
+     *
+     * @author Armonia Tech <developer@armonia-tech.com>
+     * @param string $font_file
+     * @param int optional $font_size
+     * @param int optional $font_top_spacing
+     * @param boolean optional $has_print_text
+     * @return void
+     */
+    public static function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true)
+    {
+        // set the print text
+        $this->barcode_array['font_file'] = $font_filepath;
+        $this->barcode_array['has_print_text'] = $has_print_text;
+        $this->barcode_array['font_size'] = $font_size;
+        $this->barcode_array['font_top_spacing'] = $font_top_spacing;
+    }
+
+    /**
      * generate 1D barcode to PNG image
      *
      * @author Armonia Tech <developer@armonia-tech.com>
@@ -37,17 +56,10 @@ class Barcoder
      * @param array $rgb
      * @return mixed boolean image
      */
-    public static function generateBarcodePNG(string $barcode, string $format = 'C128', bool $has_print_text = true, int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
+    public static function generateBarcodePNG(string $barcode, string $format = 'C128', int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
     {
         // set the barcode content and type
         $this->setBarcode($barcode, $format);
-
-        // set the print text
-        $this->barcode_array['has_print_text'] = $has_print_text;
-        $this->barcode_array['font_file'] = getenv('BARCODE_FONT_FILEPATH');
-        $this->barcode_array['font_size'] = 29;
-        $this->barcode_array['font_top_spacing'] = 10;
-
         // output the barcode as PNG image
         return $this->getBarcodePngData($width_pixel, $width_height, $rgb);
     }
