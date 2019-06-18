@@ -65,19 +65,19 @@ class Barcoder
      *
      * @author Armonia Tech <developer@armonia-tech.com>
      * @param string $file
-     * @param string $format
-     * @param bool $has_print_text
-     * @param int $width_pixel
-     * @param int $width_height
-     * @param array $rgb
+     * @param string $format default 'C128'
+     * @param string $image_format default 'PNG'
+     * @param int $width_pixel default 2
+     * @param int $width_height default 100
+     * @param array $rgb default [0,0,0]
      * @return mixed boolean image
      */
-    public function generateBarcodePNG(string $barcode, string $format = 'C128', int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
+    public function generateBarcode(string $barcode, string $format = 'C128', string $image_format = 'PNG', int $width_pixel = 2, int $width_height = 100, array $rgb = [0,0,0])
     {
         // set the barcode content and type
         $this->setBarcode($barcode, $format);
         // output the barcode as PNG image
-        return $this->getBarcodePngData($width_pixel, $width_height, $rgb);
+        return $this->getBarcodeData($width_pixel, $width_height, $rgb, $image_format);
     }
 
     /**
@@ -177,11 +177,12 @@ class Barcoder
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
+     * @param string $image_format default 'PNG'
      * @public
      */
-    public function getBarcodePNG($w = 2, $h = 30, $color = array(0, 0, 0))
+    public function getBarcodePNG($w = 2, $h = 30, $color = array(0, 0, 0), $image_format = 'PNG')
     {
-        $data = $this->getBarcodePngData($w, $h, $color);
+        $data = $this->getBarcodeData($w, $h, $color, $image_format);
         // send headers
         header('Content-Type: image/png');
         header('Cache-Control: public, must-revalidate, max-age=0'); // HTTP/1.1
@@ -197,10 +198,11 @@ class Barcoder
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
+     * @param string $image_format default 'PNG'
      * @return image or false in case of error.
      * @public
      */
-    public function getBarcodePngData($w = 2, $h = 100, $color = array(0, 0, 0))
+    public function getBarcodeData($w = 2, $h = 100, $color = array(0, 0, 0), $image_format = 'PNG')
     {
         if (!empty($this->font_array['has_print_text'])) {
             $code = $this->barcode_array['code'];
@@ -269,7 +271,14 @@ class Barcoder
             return $png;
         } else {
             ob_start();
-            imagepng($png);
+            if ($image_format == 'PNG') {
+                imagepng($png);
+            } else if ($image_format == 'JPG' || $image_format == 'JPEG') {
+                imagejpeg($png);
+            } else if ($image_format == 'GIF') {
+                imagegif($png);
+            }
+            
             $imagedata = ob_get_clean();
             imagedestroy($png);
             return $imagedata;
