@@ -273,9 +273,9 @@ class Barcoder
             ob_start();
             if ($image_format == 'PNG') {
                 imagepng($png);
-            } else if ($image_format == 'JPG' || $image_format == 'JPEG') {
+            } elseif ($image_format == 'JPG' || $image_format == 'JPEG') {
                 imagejpeg($png);
-            } else if ($image_format == 'GIF') {
+            } elseif ($image_format == 'GIF') {
                 imagegif($png);
             }
             
