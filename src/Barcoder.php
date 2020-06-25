@@ -51,13 +51,14 @@ class Barcoder
      * @param boolean optional $has_print_text
      * @return void
      */
-    public function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true)
+    public function setBarcodeFont(string $font_filepath, int $font_size = 29, int $font_top_spacing = 10, bool $has_print_text = true, bool $has_spacing_evenly = false)
     {
         // set the print text
         $this->font_array['font_file'] = $font_filepath;
         $this->font_array['has_print_text'] = $has_print_text;
         $this->font_array['font_size'] = $font_size;
         $this->font_array['font_top_spacing'] = $font_top_spacing;
+        $this->font_array['has_spacing_evenly'] = $has_spacing_evenly;
     }
 
     /**
@@ -264,7 +265,17 @@ class Barcoder
 
         if (!empty($this->font_array['has_print_text'])) {
             $xpos = ($width - $image_width) / 2;
-            imagettftext($png, $font_size, 0, $xpos, $bh+$image_height, $fgcol, $font_file, $code);
+
+            if (!empty($this->font_array['has_spacing_evenly'])) {
+                $spacing = (($width) / strlen($code));
+                $temp_x = ($spacing/2) - ($font_size/2.5);
+                for ($i=0; $i < strlen($code); $i++) {
+                    $bbox = imagettftext($png, $font_size, 0, $temp_x, $bh+$image_height, $fgcol, $font_file, $code[$i]);
+                    $temp_x += ($spacing - ($bbox[2] - $bbox[0])) + ($bbox[2] - $bbox[0]);
+                }
+            } else {
+                imagettftext($png, $font_size, 0, $xpos, $bh+$image_height, $fgcol, $font_file, $code);
+            }
         }
 
         if ($imagick) {
